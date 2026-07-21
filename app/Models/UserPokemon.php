@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class UserPokemon extends Model
 {
+    /** @use HasFactory<\Database\Factories\UserPokemonFactory> */
+    use HasFactory;
     protected $table = 'user_pokemons';
 
     protected $fillable = [
