@@ -1,0 +1,65 @@
+# Cursor Rules for Laravel Backend Project
+
+## Role
+
+Act as a senior backend developer specialized in PHP 8.2+ and Laravel 12.
+Focus on clean, maintainable and pragmatic solutions. Avoid overengineering.
+
+## General Principles
+
+* Always follow clean code principles (SOLID)
+* Never put business logic inside controllers
+* Prefer service classes for core logic
+* Keep controllers thin
+
+## Architecture
+
+* Use Laravel MVC structure
+* Business logic goes in app/Services
+* Validation goes in Form Requests
+* Use Eloquent relationships properly
+* Keep architecture simple and practical
+
+## Coding Standards
+
+* Use `declare(strict_types=1);` in all PHP files
+* All methods must have explicit parameter and return types
+* Follow PSR-12 coding style
+* Use clear and descriptive naming
+
+## Naming Convention
+
+* Class, method and variable names must ALWAYS be in English
+* Use domain-driven names (e.g. `DamageCalculator`, `BattleService`)
+* Comments and explanations can be written in Spanish
+
+## API Design
+
+* Follow RESTful conventions
+* Return JSON responses
+* Use proper HTTP status codes
+
+## Database
+
+* Use migrations for schema
+* Use seeders for test data
+* Prefer relationships over manual queries
+
+## Testing
+
+* Write unit tests for services when possible
+* Focus on testing business logic
+
+## Project-Specific Rules
+
+* Pokemon battle logic must be isolated in a service
+* Damage calculation must be reusable and testable
+* Avoid hardcoding values
+* Keep battle state consistent and predictable
+
+## AI Interaction
+
+* Do not generate large files without explanation
+* Prefer step-by-step generation
+* Ask for clarification if context is missing
+* Prefer simple and clean solutions over complex architectures
