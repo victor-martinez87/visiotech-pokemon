@@ -1,28 +1,69 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-echo "🚀 Iniciando instalación..."
+# Detener el script si algún comando falla
+set -e
 
-# Build + levantar contenedores
-docker compose up -d --build
+echo "🚀 Iniciando instalación (Linux / macOS)..."
 
-echo "⏳ Esperando a que Docker esté listo..."
-sleep 5
+# ----------------------------------------
+# 1. Preparar entorno y .env
+# ----------------------------------------
+if [ ! -f .env ]; then
+    echo "📄 Copiando .env.example a .env..."
+    cp .env.example .env
+fi
 
-# Instalar dependencias
-docker compose exec app composer install
+# ----------------------------------------
+# 2. Construir imágenes (sin levantar el servidor aún)
+# ----------------------------------------
+echo "🐳 Construyendo contenedores..."
+docker compose build
 
-# Copiar .env si no existe
-docker compose exec app bash -c "[ -f .env ] || cp .env.example .env"
+# ----------------------------------------
+# 3. Preparar SQLite (Usamos run --rm)
+# ----------------------------------------
+echo "🗄️ Preparando base de datos..."
+docker compose run --rm app sh -c "mkdir -p database && touch database/database.sqlite"
 
-# Generar APP KEY
-docker compose exec app php artisan key:generate
+# ----------------------------------------
+# 4. Backend (Composer & Artisan)
+# ----------------------------------------
+echo "📦 Instalando dependencias de PHP..."
+docker compose run --rm app composer install
+docker compose run --rm app php artisan key:generate
 
-# Migraciones + seeders (SQLite)
-docker compose exec app php artisan migrate:fresh --seed
+# Añadimos --force para que Laravel no se bloquee en entornos CI/CD
+docker compose run --rm app php artisan migrate:fresh --seed --force
 
-# Tests
+# ----------------------------------------
+# 5. Frontend (Usamos el contenedor 'node')
+# ----------------------------------------
+echo "🎨 Compilando assets (Vite/Tailwind)..."
+docker compose run --rm node sh -c "npm install && npm run build"
+
+# ----------------------------------------
+# 6. Tests
+# ----------------------------------------
 echo "🧪 Ejecutando tests..."
-docker compose exec app php artisan test
+docker compose run --rm app php artisan test
 
-echo "✅ Instalación completada"
+# ----------------------------------------
+# 7. Levantar contenedores definitivos
+# ----------------------------------------
+echo "🚀 Levantando servidor de la aplicación..."
+docker compose up -d
+
+# Verificación rápida de que no ha crasheado
+sleep 3
+if ! docker compose ps | grep -q "app.*Up"; then
+    echo "❌ ERROR: El contenedor se ha caído al intentar arrancar. Revisando logs:"
+    docker compose logs app
+    exit 1
+fi
+
+# ----------------------------------------
+# 8. Done
+# ----------------------------------------
+echo ""
+echo "✅ Instalación completada con éxito"
 echo "🌐 http://localhost:8000"
