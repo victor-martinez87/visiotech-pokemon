@@ -37,9 +37,9 @@ docker compose exec app sh -c "mkdir -p database && touch database/database.sqli
 # ----------------------------------------
 # 4. Backend
 # ----------------------------------------
-docker compose exec app composer install
-docker compose exec app php artisan key:generate
-docker compose exec app php artisan migrate:fresh --seed
+docker compose run --rm app composer install
+docker compose run --rm app php artisan key:generate
+docker compose run --rm app php artisan migrate:fresh --seed
 
 # ----------------------------------------
 # 5. Frontend
@@ -50,7 +50,7 @@ docker compose exec app sh -c "if command -v npm >/dev/null 2>&1; then npm insta
 # 6. Tests
 # ----------------------------------------
 Write-Host "🧪 Ejecutando tests..."
-docker compose exec app php artisan test
+docker compose run --rm app php artisan test
 
 # ----------------------------------------
 # 7. Done
