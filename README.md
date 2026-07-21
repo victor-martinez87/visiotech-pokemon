@@ -1,4 +1,4 @@
-# ⚡ Pokémon Battle API & Simulator — Laravel 12
+# ⚡ Víctor Martínez - Pokémon Battle API & Simulator — Laravel 12
 
 API RESTful y Simulador de Combate Pokémon construido con **Laravel 12** y **PHP 8.2+**. 
 
@@ -30,26 +30,37 @@ El proyecto incluye un motor de cálculo de daño basado en la mecánica origina
 Sigue estos sencillos pasos para clonar e instalar el proyecto en tu entorno local:
 
 ### 1. Clonar el repositorio
+```bash
 git clone git@github.com:victor-martinez87/visiotech-pokemon.git
 cd pokemon
+```
 
 ### 2. Instalar dependencias de PHP
+```bash
 composer install
 npm install
 npm run build
+```
+
 
 ### 3. Configurar el archivo de entorno
 Copia el archivo de ejemplo .env.example a .env con el siguiente comando:
 
+```bash
 cp .env.example .env
+```
+
 
 Genera la clave de la aplicación:
+```bash
 php artisan key:generate
-
+```
 ### 4. Migraciones y Carga de Datos (Seeders)
 Ejecuta las migraciones junto con los Seeders para poblar la base de datos con los Pokémon, Movimientos y Equipos de prueba iniciales:
-
+```bash
 php artisan migrate:fresh --seed
+```
+
 
 Datos cargados por defecto:
 - Pokémon Base: Pikachu, Charmander, Squirtle, Bulbasaur.
@@ -57,7 +68,10 @@ Datos cargados por defecto:
 - Equipo Usuario: Pikachu y Charmander equipados con sus movimientos correspondientes.
 
 ### 5. Levantar el servidor de desarrollo
+```bash
 php artisan serve
+```
+
 El servidor estará escuchando en http://127.0.0.1:8000.
 
 ---
@@ -77,15 +91,20 @@ Podrás seleccionar el Pokémon Atacante, el Movimiento a ejecutar y el Pokémon
 La suite de pruebas valida la estructura JSON de las respuestas, las reglas de validación (HTTP 422) y la integridad de la base de datos tras las operaciones CRUD.
 
 Para ejecutar todos los tests:
+```bash
 php artisan test
+```
 
 Para probar solo un archivo específico:
 
+```bash
 php artisan test tests/Feature/BattleStateTest.php
 php artisan test tests/Feature/BattleControllerTest.php
 php artisan test tests/Feature/PokemonQueriesTest.php
 php artisan test tests/Feature/UserPokemonControllerTest.php
 php artisan test tests/Unit/DamageCalculatorTest.php
+```
+
 
 ---
 
@@ -122,17 +141,18 @@ GET /api/health: Comprobador de estado y disponibilidad del servidor.
 ## 📫 Pruebas con Postman
 
 El proyecto incluye la colección de Postman configurada para importar y probar de forma inmediata.
-
+```text
 1. Abre Postman.
 2. Haz clic en Import > Raw Text (o Paste raw text).
 3. Copia y pega el contenido del archivo postman_collection.json (ubicado en la raíz del proyecto) o usa el JSON exportado.
 4. Asegúrate de que el servidor local está levantado (php artisan serve).
 5. La colección utiliza la variable global {{base_url}} (fijada por defecto en http://127.0.0.1:8000).
-
+```
 ---
 
 ## 📁 Estructura del Proyecto
 
+```text
 app/
 ├── Http/
 │   ├── Controllers/Api/
@@ -172,3 +192,4 @@ tests/
 │   └── UserPokemonControllerTest.php   # Tests de integración del CRUD de la mochila
 └── Unit/
     └── DamageCalculatorTest.php        # Tests unitarios de la fórmula matemática
+```
