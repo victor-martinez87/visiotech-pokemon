@@ -74,8 +74,16 @@ class DamageCalculator
         $statRatio = $attackStat / $defenseStat;
         $baseDamage = (($levelFactor * $move->power * $statRatio) / 50) + 2;
 
-        // 4. Aplicar efectividad y redondear
-        $finalDamage = (int) max(1, round($baseDamage * $effectiveness));
+        // 4. Factor Random 
+        $random = rand(85, 100);
+        $randomFactor = $random / 100;
+
+       
+        if ($effectiveness === 0.0) {
+            $finalDamage = 0;
+        } else {
+            $finalDamage = (int) max(1, floor($baseDamage * $effectiveness * $randomFactor));
+        }
 
         return [
             'damage'        => $finalDamage,

@@ -55,8 +55,11 @@ class BattleControllerTest extends TestCase
                     ],
                 ],
             ])
-            ->assertJsonPath('data.calculation.damage', 66)
             ->assertJsonPath('data.calculation.effectiveness', 2);
+
+        $damage = $response->json('data.calculation.damage');
+        $this->assertIsInt($damage);
+        $this->assertGreaterThan(0, $damage);
     }
 
     public function test_calculate_damage_returns_validation_errors_when_parameters_are_missing(): void

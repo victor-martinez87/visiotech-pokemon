@@ -12,6 +12,7 @@ class Move extends Model
 {
     /** @use HasFactory<\Database\Factories\MoveFactory> */
     use HasFactory;
+
     protected $fillable = [
         'name',
         'type',
@@ -27,6 +28,11 @@ class Move extends Model
 
     public function userPokemons(): BelongsToMany
     {
-        return $this->belongsToMany(UserPokemon::class, 'user_pokemon_moves');
+        return $this->belongsToMany(
+            UserPokemon::class,
+            'user_pokemon_move',
+            'move_id',
+            'user_pokemon_id'
+        );
     }
 }
