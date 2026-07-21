@@ -33,15 +33,26 @@ El proyecto incluye un motor de cálculo de daño basado en la mecánica origina
 
 Sigue estos sencillos pasos para clonar e instalar el proyecto en tu entorno local:
 
-## Instalación automática:
+## Instalación automática en Linux / macOS / Git Bash :
+
 ```bash
-git clone git@github.com:victor-martinez87/visiotech-pokemon.git pokemon
-cd pokemon
+git clone git@github.com:victor-martinez87/visiotech-pokemon.git
+cd visiotech-pokemon
 chmod +x setup.sh
 ./setup.sh
 ```
+## Instalación automática en Windows :
+
+```bash
+git clone git@github.com:victor-martinez87/visiotech-pokemon.git
+cd visiotech-pokemon
+./setup.ps1
+```
+
 
 ## Instalación Manual:
+
+
 
 ### 1. Clonar el repositorio
 
