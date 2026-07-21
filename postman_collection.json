@@ -1,16 +1,16 @@
 {
     "info": {
-      "_postman_id": "pokemon-api-collection-v1",
+      "_postman_id": "pokemon-api-collection-v2",
       "name": "Pokémon Battle API - Laravel 12",
-      "description": "Colección de endpoints para la prueba técnica de Pokémon (Calculadora de daño y CRUD de mochila).",
+      "description": "Colección completa de endpoints para la prueba técnica de Pokémon (Calculadora de daño, Consultas relacionales, CRUD de mochila y Combate persistente por turnos).",
       "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
       {
-        "name": "Battle",
+        "name": "Battle System",
         "item": [
           {
-            "name": "Calculate Damage",
+            "name": "Calculate Damage (Direct)",
             "request": {
               "method": "POST",
               "header": [
@@ -38,14 +38,164 @@
                   "calculate"
                 ]
               },
-              "description": "Calcula el daño exacto entre un Pokémon atacante, un defensor y un movimiento."
+              "description": "Calcula el daño instantáneo entre un Pokémon atacante, un defensor y un movimiento sin guardar estado."
+            },
+            "response": []
+          },
+          {
+            "name": "Start Battle (Persistent)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"pokemon_1_id\": 1,\n  \"pokemon_2_id\": 3\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/battles/start",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "battles",
+                  "start"
+                ]
+              },
+              "description": "Inicia un combate persistente guardando el estado inicial en la base de datos (Parte 3)."
+            },
+            "response": []
+          },
+          {
+            "name": "Execute Turn",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"move_id\": 1\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/battles/1/turn",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "battles",
+                  "1",
+                  "turn"
+                ]
+              },
+              "description": "Ejecuta un turno restando PS reales en la base de datos hasta llegar a 0 (Parte 3)."
             },
             "response": []
           }
         ]
       },
       {
-        "name": "User Pokemons",
+        "name": "Pokemon Queries (Relational)",
+        "item": [
+          {
+            "name": "Get Pokemon Assigned Moves",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/pokemons/1/moves",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "pokemons",
+                  "1",
+                  "moves"
+                ]
+              },
+              "description": "Obtiene los movimientos asignados a un Pokémon específico."
+            },
+            "response": []
+          },
+          {
+            "name": "Get Pokemon Possible Moves (Type & Normal)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/pokemons/1/possible-moves",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "pokemons",
+                  "1",
+                  "possible-moves"
+                ]
+              },
+              "description": "Listar qué movimientos puede aprender/usar un Pokémon según su tipo o de tipo Normal."
+            },
+            "response": []
+          },
+          {
+            "name": "Get Pokemons By Move",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/moves/2/pokemons",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "moves",
+                  "2",
+                  "pokemons"
+                ]
+              },
+              "description": "Consulta para obtener la lista de Pokémon que comparten o pueden usar un mismo movimiento."
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "User Pokemons (Backpack CRUD)",
         "item": [
           {
             "name": "Get User Pokemons (List)",
@@ -67,7 +217,7 @@
                   "user-pokemons"
                 ]
               },
-              "description": "Obtiene todos los Pokémon capturados por el usuario con eager loading de relaciones (pokemon y moves)."
+              "description": "Obtiene todos los Pokémon capturados por el usuario con eager loading de relaciones."
             },
             "response": []
           },

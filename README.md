@@ -35,9 +35,12 @@ cd pokemon
 
 ### 2. Instalar dependencias de PHP
 composer install
+npm install
+npm run build
 
 ### 3. Configurar el archivo de entorno
-Copia el archivo de ejemplo .env.example a .env:
+Copia el archivo de ejemplo .env.example a .env con el siguiente comando:
+
 cp .env.example .env
 
 Genera la clave de la aplicación:
@@ -77,7 +80,10 @@ Para ejecutar todos los tests:
 php artisan test
 
 Para probar solo un archivo específico:
+
+php artisan test tests/Feature/BattleStateTest.php
 php artisan test tests/Feature/BattleControllerTest.php
+php artisan test tests/Feature/PokemonQueriesTest.php
 php artisan test tests/Feature/UserPokemonControllerTest.php
 php artisan test tests/Unit/DamageCalculatorTest.php
 
@@ -85,46 +91,31 @@ php artisan test tests/Unit/DamageCalculatorTest.php
 
 ## 📡 Documentación de la API REST
 
-### 1. Calculadora de Daño
-- POST /api/battle/calculate
-- Headers: Content-Type: application/json, Accept: application/json
-- Body Payload:
-  {
-    "attacker_id": 2,
-    "defender_id": 4,
-    "move_id": 2
-  }
+### 1. Sistema de Combate (Battle System)
+POST /api/battle/calculate: Calcula el daño instantáneo entre atacante, defensor y movimiento.
 
-- Respuesta Exitosa (200 OK):
-  {
-    "success": true,
-    "data": {
-      "attacker": { "id": 2, "name": "Charmander" },
-      "defender": { "id": 4, "name": "Bulbasaur" },
-      "move": { "id": 2, "name": "Flamethrower", "power": 90 },
-      "calculation": {
-        "damage": 77,
-        "effectiveness": 2.0,
-        "is_special": true,
-        "message": "¡Es muy eficaz!"
-      }
-    }
-  }
+POST /api/battles/start: Inicia un combate persistente en BD. (Payload: pokemon_1_id, pokemon_2_id)
 
----
+POST /api/battles/{id}/turn: Ejecuta un turno oficial descontando PS al defensor en BD. (Payload: move_id)
 
-### 2. Mochila del Usuario (UserPokemon)
+### 2. Consultas Relacionales (Pokémon & Movimientos)
+GET /api/pokemons/{id}/moves: Lista todos los movimientos asignados a un Pokémon.
 
-- GET /api/user-pokemons : Lista los Pokémon capturados con sus relaciones (pokemon, moves).
-- POST /api/user-pokemons : Añade un Pokémon asignándole hasta 4 movimientos.
-- GET /api/user-pokemons/{id} : Muestra el detalle de un Pokémon capturado por su ID.
-- DELETE /api/user-pokemons/{id} : Libera/elimina un Pokémon de la mochila.
+GET /api/pokemons/{id}/possible-moves: Lista movimientos que el Pokémon puede aprender (filtra por su tipo base y tipo Normal).
 
-Ejemplo Payload POST /api/user-pokemons:
-{
-  "pokemon_id": 3,
-  "move_ids": [3, 5]
-}
+GET /api/moves/{id}/pokemons: Muestra todos los Pokémon que comparten o pueden usar un movimiento específico.
+
+### 3. Mochila del Usuario (UserPokemon)
+GET /api/user-pokemons: Lista los Pokémon capturados con sus relaciones cargadas (Eager Loading).
+
+POST /api/user-pokemons: Añade un Pokémon asignándole hasta 4 movimientos. (Payload: pokemon_id, move_ids)
+
+GET /api/user-pokemons/{id}: Muestra el detalle de un Pokémon capturado por su ID en la mochila.
+
+DELETE /api/user-pokemons/{id}: Libera/elimina un Pokémon de la mochila.
+
+### 4. Utilidades
+GET /api/health: Comprobador de estado y disponibilidad del servidor.
 
 ---
 
@@ -145,31 +136,39 @@ El proyecto incluye la colección de Postman configurada para importar y probar 
 app/
 ├── Http/
 │   ├── Controllers/Api/
-│   │   ├── BattleController.php        # Controlador para cálculo de daño
+│   │   ├── BattleController.php        # Controlador para cálculo de daño y persistencia de combate
+│   │   ├── PokemonController.php       # Consultas relacionales (Filtros por tipo y movimientos)
 │   │   └── UserPokemonController.php   # CRUD de la mochila de Pokémon
 │   └── Requests/Api/
 │       ├── CalculateDamageRequest.php  # Validación de parámetros de combate
 │       └── StoreUserPokemonRequest.php  # Validación de creación de UserPokemon
 ├── Models/
-│   ├── Move.php
-│   ├── Pokemon.php
-│   └── UserPokemon.php
+│   ├── Battle.php                      # Estado y turnos del combate persistente
+│   ├── Move.php                        # Modelo de Movimientos
+│   ├── Pokemon.php                     # Modelo de Pokémon base
+│   └── UserPokemon.php                 # Modelo de Pokémon en la mochila del usuario
 └── Services/
-    └── DamageCalculator.php            # Lógica de dominio y fórmula de daño
+    └── DamageCalculator.php            # Lógica de dominio y fórmula oficial de daño
 
 database/
 ├── factories/                          # Fábricas para generación de datos de test
 ├── migrations/                         # Estructura de tablas y claves foráneas
 └── seeders/                            # Seeders iniciales con datos de Kanto
 
-resources/views/
-└── battle.blade.php                    # Simulador de combate interactivo
+resources/
+├── css/app.css                         # Configuración de Tailwind CSS v4 y fuentes
+└── views/
+    └── welcome.blade.php               # Simulador de combate interactivo
 
 routes/
-├── api.php                             # Rutas protegidas de la API
+├── api.php                             # Rutas de la API REST
 └── web.php                             # Ruta del simulador web
 
-tests/Feature/
-├── BattleControllerTest.php            # Tests de integración del combate
-└── UserPokemonControllerTest.php       # Tests de integración del CRUD
-
+tests/
+├── Feature/
+│   ├── BattleControllerTest.php        # Tests de integración de la calculadora de daño
+│   ├── BattleStateTest.php             # Tests de integración del combate por turnos
+│   ├── PokemonQueriesTest.php          # Tests de las consultas relacionales
+│   └── UserPokemonControllerTest.php   # Tests de integración del CRUD de la mochila
+└── Unit/
+    └── DamageCalculatorTest.php        # Tests unitarios de la fórmula matemática
