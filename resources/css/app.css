@@ -1,11 +1,44 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-pixel: 'Press Start 2P', monospace;
+}
+
+body {
+    font-family: var(--font-sans);
+}
+
+.font-pixel {
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* Fondo con ruta relativa procesable por Vite */
+.bg-battlefield {
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.92)), url('../../public/images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Scrollbar estilizada */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(51, 65, 85, 0.8);
+    border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(245, 158, 11, 0.6);
 }
