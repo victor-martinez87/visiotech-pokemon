@@ -1,0 +1,166 @@
+{
+    "info": {
+      "_postman_id": "pokemon-api-collection-v1",
+      "name": "Pokémon Battle API - Laravel 12",
+      "description": "Colección de endpoints para la prueba técnica de Pokémon (Calculadora de daño y CRUD de mochila).",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Battle",
+        "item": [
+          {
+            "name": "Calculate Damage",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"attacker_id\": 2,\n  \"defender_id\": 4,\n  \"move_id\": 2\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/battle/calculate",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "battle",
+                  "calculate"
+                ]
+              },
+              "description": "Calcula el daño exacto entre un Pokémon atacante, un defensor y un movimiento."
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "User Pokemons",
+        "item": [
+          {
+            "name": "Get User Pokemons (List)",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/user-pokemons",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "user-pokemons"
+                ]
+              },
+              "description": "Obtiene todos los Pokémon capturados por el usuario con eager loading de relaciones (pokemon y moves)."
+            },
+            "response": []
+          },
+          {
+            "name": "Store User Pokemon (Capture)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"pokemon_id\": 3,\n  \"move_ids\": [3, 5]\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/user-pokemons",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "user-pokemons"
+                ]
+              },
+              "description": "Añade un Pokémon a la mochila asignándole hasta 4 movimientos."
+            },
+            "response": []
+          },
+          {
+            "name": "Show User Pokemon Detail",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/user-pokemons/1",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "user-pokemons",
+                  "1"
+                ]
+              },
+              "description": "Muestra el detalle de un Pokémon capturado por su ID en la mochila."
+            },
+            "response": []
+          },
+          {
+            "name": "Delete User Pokemon",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "url": {
+                "raw": "{{base_url}}/api/user-pokemons/1",
+                "host": [
+                  "{{base_url}}"
+                ],
+                "path": [
+                  "api",
+                  "user-pokemons",
+                  "1"
+                ]
+              },
+              "description": "Elimina/libera un Pokémon de la mochila."
+            },
+            "response": []
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://127.0.0.1:8000",
+        "type": "string"
+      }
+    ]
+  }
