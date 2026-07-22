@@ -1,0 +1,188 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Pokémon Battle API",
+      "description": "API para la gestión de Pokémons, Movimientos y simulación de Combates (Prueba Técnica Visiotech)",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "/api",
+        "description": "Servidor API Local"
+      }
+    ],
+    "paths": {
+      "/battle/calculate": {
+        "post": {
+          "tags": ["Battles"],
+          "summary": "Calcula el daño de un ataque (Sin guardar estado)",
+          "description": "Recibe un Pokémon, su movimiento y el rival, y calcula el daño según la fórmula oficial.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["attacker_id", "defender_id", "move_id"],
+                  "properties": {
+                    "attacker_id": { "type": "integer", "example": 1 },
+                    "defender_id": { "type": "integer", "example": 4 },
+                    "move_id": { "type": "integer", "example": 2 }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Cálculo de daño realizado con éxito" },
+            "422": { "description": "Error de validación en los parámetros enviados" }
+          }
+        }
+      },
+      "/battles": {
+        "post": {
+          "tags": ["Battles"],
+          "summary": "Inicia un nuevo combate entre dos Pokémons",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["pokemon_1_id", "pokemon_2_id"],
+                  "properties": {
+                    "pokemon_1_id": { "type": "integer", "example": 1 },
+                    "pokemon_2_id": { "type": "integer", "example": 4 }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Combate iniciado correctamente" }
+          }
+        }
+      },
+      "/battles/{id}/turn": {
+        "post": {
+          "tags": ["Battles"],
+          "summary": "Ejecuta un turno de combate",
+          "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["move_id"],
+                  "properties": {
+                    "move_id": { "type": "integer", "example": 3 }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Turno ejecutado correctamente" },
+            "400": { "description": "El combate ya ha finalizado" }
+          }
+        }
+      },
+      "/pokemons/{id}/moves": {
+        "get": {
+          "tags": ["Pokemons"],
+          "summary": "Obtener los movimientos asignados a un Pokémon",
+          "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+          ],
+          "responses": {
+            "200": { "description": "Lista de movimientos equipados" }
+          }
+        }
+      },
+      "/pokemons/{id}/possible-moves": {
+        "get": {
+          "tags": ["Pokemons"],
+          "summary": "Obtener los movimientos posibles de un Pokémon por tipo",
+          "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+          ],
+          "responses": {
+            "200": { "description": "Lista de movimientos compatibles" }
+          }
+        }
+      },
+      "/moves/{id}/pokemons": {
+        "get": {
+          "tags": ["Moves"],
+          "summary": "Obtener Pokémons que comparten un mismo movimiento",
+          "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+          ],
+          "responses": {
+            "200": { "description": "Lista de Pokémons compatibles" }
+          }
+        }
+      },
+      "/user-pokemons": {
+        "get": {
+          "tags": ["My Pokemons"],
+          "summary": "Listar Pokémons del usuario",
+          "responses": {
+            "200": { "description": "Lista de Pokémons en el equipo" }
+          }
+        },
+        "post": {
+          "tags": ["My Pokemons"],
+          "summary": "Añadir Pokémon al equipo (Máximo 4 movimientos)",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["pokemon_id", "move_ids"],
+                  "properties": {
+                    "pokemon_id": { "type": "integer", "example": 1 },
+                    "move_ids": {
+                      "type": "array",
+                      "items": { "type": "integer" },
+                      "example": [1, 2, 3, 4],
+                      "description": "Máximo 4 movimientos permitidos."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Pokémon guardado con éxito" }
+          }
+        }
+      },
+      "/user-pokemons/{id}": {
+        "get": {
+          "tags": ["My Pokemons"],
+          "summary": "Ver detalle de un Pokémon del usuario",
+          "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+          ],
+          "responses": {
+            "200": { "description": "Detalle del Pokémon" }
+          }
+        },
+        "delete": {
+          "tags": ["My Pokemons"],
+          "summary": "Eliminar un Pokémon del equipo",
+          "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+          ],
+          "responses": {
+            "200": { "description": "Pokémon eliminado" }
+          }
+        }
+      }
+    }
+  }
