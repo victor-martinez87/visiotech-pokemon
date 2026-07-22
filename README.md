@@ -8,16 +8,22 @@ El proyecto incluye un motor de cálculo de daño basado en la mecánica origina
 
 ## 🚀 Características Principales
 
+- **Documentación Interactiva (Swagger / OpenAPI):** Panel interactivo en `/api/documentation` para explorar y probar todos los endpoints de la API en tiempo real.
 - **Arquitectura Limpia & Domain Driven:** Separación estricta de responsabilidades usando Services, Form Requests y API Controllers.
-- **Motor de Cálculo de Daño (DamageCalculator):** Lógica de negocio pura aislada en un servicio, con cálculo de efectividad de tipos (2.0x, 0.5x, 0.0x) y resolución dinámica entre ataque físico o especial.
-- **Relaciones Eloquent Complejas:** Modelos Pokemon, Move y UserPokemon mapeados con relaciones belongsToMany a través de tabla pivote (user_pokemon_move).
-- **Tests Automatizados:** Cobertura de tests de integración con Pest / PHPUnit usando RefreshDatabase, factories y seeders.
-- **Simulador Web Integrado:** Interfaz retro en Blade + Tailwind CSS que consume la API vía JavaScript fetch.
+- **Motor de Cálculo de Daño (**`DamageCalculator`**):** Lógica de negocio pura aislada en un servicio, con cálculo de efectividad de tipos (2.0x, 0.5x, 0.0x) y resolución dinámica entre ataque físico o especial.
+- **Relaciones Eloquent Complejas:** Modelos `Pokemon`, `Move` y `UserPokemon` mapeados con relaciones `belongsToMany` a través de tabla pivote (`user_pokemon_move`).
+- **Tests Automatizados:** Cobertura de tests de integración con Pest / PHPUnit usando `RefreshDatabase`, factories y seeders.
+- **Simulador Web Integrado:** Interfaz retro en Blade + Tailwind CSS que consume la API vía JavaScript `fetch`.
 - **Colección Postman Incluida:** Archivo JSON listo para importar y probar los endpoints.
 
 ---
 
 
+
+## 📚 Documentación de la API (Swagger)
+
+Una vez levantado el proyecto, puedes consultar y probar la documentación interactiva de la API en:
+👉 `http://localhost:8000/api/documentation`
 
 ## 🛠️ Requisitos del Sistema
 
@@ -41,6 +47,9 @@ cd visiotech-pokemon
 chmod +x setup.sh
 ./setup.sh
 ```
+
+
+
 ## Instalación automática en Windows :
 
 ```bash
@@ -48,6 +57,7 @@ git clone git@github.com:victor-martinez87/visiotech-pokemon.git
 cd visiotech-pokemon
 ./setup.ps1
 ```
+
 
 
 ## Instalación Manual:
